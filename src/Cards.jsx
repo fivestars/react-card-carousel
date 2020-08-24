@@ -200,7 +200,7 @@ class Cards extends Component {
    * @returns {React.Node}
    */
   ChildComponents = () => {
-    const { alignment, spread, disable_box_shadow, spread_custom } = this.props;
+    const { alignment, spread, disable_box_shadow, spread_custom, enable_swipe, opacity_custom } = this.props;
 
     return React.Children.map(
       this.props.children, (child, index) => {
