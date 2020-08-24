@@ -209,8 +209,8 @@ class Cards extends Component {
 
         return (
           <Swipeable
-            onSwipedLeft={enable_swipe ? this.next() : null }
-            onSwipedRight={enable_swipe ? this.prev() : null}
+            onSwipedLeft={enable_swipe ? this.next : null }
+            onSwipedRight={enable_swipe ? this.prev : null}
             key={ index }
             onClick={ () => this._cardOnClick(position) }
             style={{
