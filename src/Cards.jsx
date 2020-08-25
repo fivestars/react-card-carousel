@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Swipeable } from 'react-swipeable'
 import PropTypes from 'prop-types';
 import {
   STYLES,
@@ -28,11 +29,14 @@ class Cards extends Component {
 
   static propTypes = {
     alignment: PropTypes.oneOf([ALIGNMENT.HORIZONTAL, ALIGNMENT.VERTICAL]),
-    spread: PropTypes.oneOf([SPREAD.NARROW, SPREAD.MEDIUM, SPREAD.WIDE]),
+    spread: PropTypes.oneOf([SPREAD.NARROW, SPREAD.MEDIUM, SPREAD.WIDE, SPREAD.CUSTOM]),
+    spread_custom: PropTypes.object,
+    opacity_custom: PropTypes.object,
     initial_index: PropTypes.number,
     disable_keydown: PropTypes.bool,
     disable_box_shadow: PropTypes.bool,
     disable_fade_in: PropTypes.bool,
+    enable_swipe: PropTypes.bool,
     autoplay: PropTypes.bool,
     autoplay_speed: PropTypes.number,
     afterChange: PropTypes.func,
@@ -45,6 +49,7 @@ class Cards extends Component {
     disable_keydown: false,
     disable_box_shadow: false,
     disable_fade_in: false,
+    enable_swipe: false,
     autoplay: false,
     autoplay_speed: 5000,
     afterChange: () => {},
@@ -195,7 +200,7 @@ class Cards extends Component {
    * @returns {React.Node}
    */
   ChildComponents = () => {
-    const { alignment, spread, disable_box_shadow } = this.props;
+    const { alignment, spread, disable_box_shadow, spread_custom, enable_swipe, opacity_custom } = this.props;
 
     return React.Children.map(
       this.props.children, (child, index) => {
@@ -203,20 +208,22 @@ class Cards extends Component {
         const position = this._getCardClass(index);
 
         return (
-          <div
+          <Swipeable
+            onSwipedLeft={enable_swipe ? this.next : null }
+            onSwipedRight={enable_swipe ? this.prev : null}
             key={ index }
             onClick={ () => this._cardOnClick(position) }
             style={{
               ...STYLES.CARD,
-              opacity: getOpacity(position),
+              opacity: getOpacity(position, opacity_custom),
               zIndex: getZIndex(position),
-              transform: getTransform(position, alignment, spread),
+              transform: getTransform(position, alignment, spread, spread_custom),
               boxShadow: getBoxShadow(position, alignment, disable_box_shadow),
               cursor: getCursor(position, alignment),
             }}
           >
             { child }
-          </div>
+          </Swipeable>
         );
       });
   }

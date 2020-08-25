@@ -19,9 +19,17 @@ export const STYLES = {
 
 /**
  * @param {String} position
+ * @param {Object} custom - { 'prev': Number,
+ *                            'next': Number,
+ *                            'current': Number,
+ *                            'hidden': Number}
  * @returns {Number}
  */
-export function getOpacity(position) {
+export function getOpacity(position, custom) {
+  if (custom) {
+    return custom[position];
+  }
+
   if (position === POSITION.HIDDEN) return 0;
   return 1;
 }
@@ -40,8 +48,8 @@ export function getZIndex(position) {
  * @param {String} position
  * @returns {String}
  */
-export function getTransform(position, alignment, spread) {
-  const { prev, next } = _getTranslationDistances(spread);
+export function getTransform(position, alignment, spread, custom) {
+  const { prev, next } = _getTranslationDistances(spread, custom);
 
   if (alignment === ALIGNMENT.HORIZONTAL) {
     if (position === POSITION.PREV) return `translate(${ prev }, -50%) scale(0.82)`;
@@ -91,9 +99,10 @@ export function getCursor(position, alignment) {
 
 /**
  * @param {String} spread
+ * @param {Object} custom (optional) - controls spread between the cards {prev: String, next: String}
  * @returns {Object}
  */
-function _getTranslationDistances(spread) {
+function _getTranslationDistances(spread, custom) {
   let prev, next;
   if (spread === SPREAD.MEDIUM) {
     prev = '-85%';
@@ -107,6 +116,8 @@ function _getTranslationDistances(spread) {
     prev = '-95%';
     next = '-5%';
   }
-
+  if (spread === SPREAD.CUSTOM && custom) {
+    return custom
+  }
   return { prev, next };
 }

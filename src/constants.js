@@ -23,7 +23,8 @@ export const ALIGNMENT ={
  * @returns {Object}
  */
 export const SPREAD ={
+  'CUSTOM': 'custom',
   'NARROW': 'narrow',
   'MEDIUM': 'medium',
-  'WIDE': 'wide'
+  'WIDE': 'wide',
 };
